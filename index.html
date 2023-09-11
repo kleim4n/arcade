@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arcade</title>
+    <style>
+      body {
+        background-color: black;
+        color: white;
+        font-family: monospace;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+      .game {
+        border: 1px solid white;
+        padding: 10px;
+        margin: 10px;
+        max-width: 300px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+      }
+      .game > p {
+        font-size: 1.5em;
+        text-align: center;
+      }
+      .game > button {
+        font-size: 1.5em;
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      let games = {
+        tetris: {
+          url: "tetris.html",
+          description:
+            "Tetris is a tile-matching puzzle video game originally designed and programmed by Soviet Russian software engineer Alexey Pajitnov.",
+        },
+      };
+      for (let game in games) {
+        let gameDiv = document.createElement("div");
+        let gameDescription = document.createElement("p");
+        let gameButton = document.createElement("button");
+        gameDescription.innerText = games[game].description;
+        gameButton.innerText = "Play";
+        gameButton.addEventListener("click", () => {
+          window.location.href = games[game].url;
+        });
+        gameDiv.appendChild(gameDescription);
+        gameDiv.appendChild(gameButton);
+        gameDiv.classList.add("game");
+        document.body.appendChild(gameDiv);
+      }
+    </script>
+  </body>
+</html>
