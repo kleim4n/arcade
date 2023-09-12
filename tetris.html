@@ -15,30 +15,56 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-direction: column;
       }
 
       canvas {
         border: 1px solid white;
       }
 
+      #panel {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+
       #score {
-        position: absolute;
-        top: 10px;
-        right: 10px;
         color: white;
-        font-family: monospace;
         font-size: 2em;
+        margin: 10px;
+      }
+
+      #pause {
+        font-size: 2em;
+        margin: 10px;
       }
     </style>
   </head>
   <body>
+    <div id="panel">
+      <span id="score">0</span>
+      <button id="pause">||</button>
+    </div>
     <canvas width="320" height="640" id="game"></canvas>
-    <span id="score">0</span>
     <script>
       function scoreAdd(points) {
         document.getElementById("score").innerText =
           parseInt(document.getElementById("score").innerText) + points;
       }
+
+      // pause and play
+      let pauseButton = document.getElementById("pause");
+      function pausePlayEvent() {
+        if (pauseButton.innerText === "||") {
+          pauseButton.innerText = ">";
+          cancelAnimationFrame(rAF);
+        } else if (pauseButton.innerText === ">") {
+          pauseButton.innerText = "||";
+          rAF = requestAnimationFrame(loop);
+        }
+      }
+      pauseButton.addEventListener("click", pausePlayEvent);
 
       // https://tetris.fandom.com/wiki/Tetris_Guideline
 
@@ -133,7 +159,6 @@
             }
           }
         }
-
         // check for line clears starting from the bottom and working our way up
         for (let row = playfield.length - 1; row >= 0; ) {
           if (playfield[row].every((cell) => !!cell)) {
@@ -149,6 +174,7 @@
           }
         }
 
+        // log();
         tetromino = getNextTetromino();
       }
 
@@ -328,6 +354,19 @@
           tetromino.row = row;
         }
       });
+
+      // console log an array with the playfield values
+      function log() {
+        let result = "\n";
+        let square = "▢";
+        for (let row = 0; row < playfield.length; row++) {
+          for (let col = 0; col < playfield[row].length; col++) {
+            result += `${playfield[row][col] ? "▣" : "▢"} `;
+          }
+          result += "\n";
+        }
+        console.log(result);
+      }
 
       // start the game
       rAF = requestAnimationFrame(loop);
